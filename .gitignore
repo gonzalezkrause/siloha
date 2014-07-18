@@ -1,0 +1,8 @@
+*.swp
+*.swo
+*.sublime-*
+*.pyc
+*.py[code]
+*.*~
+~*.*
+.DS_Store
