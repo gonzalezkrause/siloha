@@ -80,3 +80,24 @@ The available colors are:
 * purple
 
 * red
+
+## Log modes:
+
+There are log messages, debug only messages and nested debug messages:
+
+```
+log.msg('This is a message')
+log.alert('This is an alert message')
+log.warn('This is a warn message')
+log.error('This is an error message')
+
+log.debug('This is a debug message')
+log.dbgAlert('This is a debug alert message')
+log.dbgWarn('This is a debug warn message')
+log.dbgError('This is a debug error message')
+
+log.dbgNested('This is a nested debug message')
+log.dbgNestedAlert('This is a nested debug alert message')
+log.dbgNestedWarn('This is a nested debug warn message')
+log.dbgNestedError('This is a nested debug error message')
+```
