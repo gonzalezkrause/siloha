@@ -91,6 +91,11 @@ log.alert('This is an alert message')
 log.warn('This is a warn message')
 log.error('This is an error message')
 
+log.nestedMsg('This is a nested message')
+log.nestedAlert('This is a nested alert message')
+log.nestedWarn('This is a nested warn message')
+log.nestedError('This is a nested error message')
+
 log.debug('This is a debug message')
 log.dbgAlert('This is a debug alert message')
 log.dbgWarn('This is a debug warn message')
