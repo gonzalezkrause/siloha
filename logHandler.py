@@ -129,6 +129,40 @@ class LogHandler(object):
       )
 
 
+   #######################
+   # Nested log messages #
+   #######################
+   def nestedMsg(self, msg):
+      print('[{1}]\t└── {0}').format(msg, self.logSymbol['msg'])
+
+
+   def nestedAlert(self, msg):
+      print('{0}[{3}]{1}\t└── {2}').format(
+         self.colors[self.logColor['alert']][1], 
+         self.colors[self.logColor['alert']][0], 
+         msg,
+         self.logSymbol['alert']
+      )
+
+
+   def nestedWarn(self, msg):
+      print('{0}[{5}]\t└── {1}{2}{3}{4}').format(
+         self.colors[self.logColor['warn']][1],
+         self.colors['underline'][1],
+         msg,
+         self.colors['underline'][0],
+         self.colors[self.logColor['warn']][0],
+         self.logSymbol['warn']
+      )
+
+
+   def nestedError(self, msg):
+      print('{0}[{3}]{1}\t└── {2}').format(
+         self.colors[self.logColor['error']][1],
+         self.colors[self.logColor['error']][0],
+         msg,
+         self.logSymbol['error']
+      )
 
 
    ################################################
@@ -226,12 +260,18 @@ class LogHandler(object):
 
 
 if __name__ == '__main__':
-   log = LogHandler(debug=True, warnSym='|>', warnColor='blue')
+   log = LogHandler(debug=True)
 
    log.msg('This is a message')
    log.alert('This is an alert message')
    log.warn('This is a warn message')
    log.error('This is an error message')
+
+   print('\n=================')
+   log.nestedMsg('This is a nested message')
+   log.nestedAlert('This is a nested alert message')
+   log.nestedWarn('This is a nested warn message')
+   log.nestedError('This is a nested error message')
    
    print('\n=================')
    log.debug('This is a debug message')
