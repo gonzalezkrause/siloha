@@ -40,44 +40,15 @@ class LogHandler(object):
          'red': ['\x1b[39m', '\x1b[31m']
       }
 
-
-      if 'debug' in kw:
-         self.dbg = kw['debug']
-      else:
-         self.dbg = False
-      if 'msgColor' in kw:
-         msgColor = kw['msgColor']
-      else:
-         msgColor = 'none'
-      if 'alertColor' in kw:
-         alertColor = kw['alertColor']
-      else:
-         alertColor = 'yellow'
-      if 'warnColor' in kw:
-         warnColor = kw['warnColor']
-      else:
-         warnColor = 'purple'
-      if 'errorColor' in kw:
-         errorColor = kw['errorColor']
-      else:
-         errorColor = 'red'
-      if 'msgSym' in kw:
-         msgSym = kw['msgSym']
-      else:
-         msgSym = '*'
-      if 'alertSym' in kw:
-         alertSym = kw['alertSym']
-      else:
-         alertSym = '+'
-      if 'warnSym' in kw:
-         warnSym = kw['warnSym']
-      else:
-         warnSym = '>'
-      if 'errorSym' in kw:
-         errorSym = kw['errorSym']
-      else:
-         errorSym = '!'
-
+      self.dbg = kw.get('debug', False)
+      msgColor = kw.get('msgColor', 'none')
+      alertColor = kw.get('alertColor', 'yellow')
+      warnColor = kw.get('warnColor', 'purple')
+      errorColor = kw.get('errorColor', 'red')
+      msgSym = kw.get('msgSym', '*')
+      alertSym = kw.get('alertSym', '+')
+      warnSym = kw.get('warnSym', '>')
+      errorSym = kw.get('errorSym', '!')
 
       self.logColor = {
          'msg': msgColor,
@@ -86,14 +57,12 @@ class LogHandler(object):
          'error': errorColor
       }
 
-
       self.logSymbol = {
          'msg': msgSym,
          'alert': alertSym,
          'warn': warnSym,
          'error': errorSym
       }
-
 
 
    def msg(self, msg):
@@ -284,3 +253,4 @@ if __name__ == '__main__':
    log.dbgNestedAlert('This is a nested debug alert message')
    log.dbgNestedWarn('This is a nested debug warn message')
    log.dbgNestedError('This is a nested debug error message')
+   
