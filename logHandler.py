@@ -10,9 +10,8 @@
 class LogHandler(object):
    '''
    Simple Log Handler
-
-
    '''
+
    def __init__(self, **kw):
       super(LogHandler, self).__init__()
       # 30m - Black
@@ -28,51 +27,141 @@ class LogHandler(object):
       # 1 - Bold
 
       self.colors = {
-         'bold':{True:'\x1b[1m',False:'\x1b[22m'},
-         'black':{True:'\x1b[30m',False:'\x1b[39m'},
-         'red':{True:'\x1b[31m',False:'\x1b[39m'},
-         'green':{True:'\x1b[32m',False:'\x1b[39m'},
-         'yellow':{True:'\x1b[33m',False:'\x1b[39m'},
-         'blue':{True:'\x1b[34m',False:'\x1b[39m'},
-         'purple':{True:'\x1b[35m',False:'\x1b[39m'},
-         'cyan':{True:'\x1b[36m',False:'\x1b[39m'},
-         'white':{True:'\x1b[37m',False:'\x1b[39m'},
-         'underline':{True:'\x1b[4m',False:'\x1b[24m'}
+         'bold': ['\x1b[22m', '\x1b[1m'],
+         'underline': ['\x1b[24m', '\x1b[4m'],
+         'none': ['\x1b[39m', '\x1b[39m'],
+         'white': ['\x1b[39m', '\x1b[37m'],
+         'black': ['\x1b[39m', '\x1b[30m'],
+         'cyan': ['\x1b[39m', '\x1b[36m'],
+         'blue': ['\x1b[39m', '\x1b[34m'],
+         'green': ['\x1b[39m', '\x1b[32m'],
+         'yellow': ['\x1b[39m', '\x1b[33m'],
+         'purple': ['\x1b[39m', '\x1b[35m'],
+         'red': ['\x1b[39m', '\x1b[31m']
       }
+
 
       if 'debug' in kw:
          self.dbg = kw['debug']
       else:
          self.dbg = False
+      if 'msgColor' in kw:
+         msgColor = kw['msgColor']
+      else:
+         msgColor = 'none'
+      if 'alertColor' in kw:
+         alertColor = kw['alertColor']
+      else:
+         alertColor = 'yellow'
+      if 'warnColor' in kw:
+         warnColor = kw['warnColor']
+      else:
+         warnColor = 'purple'
+      if 'errorColor' in kw:
+         errorColor = kw['errorColor']
+      else:
+         errorColor = 'red'
+      if 'msgSym' in kw:
+         msgSym = kw['msgSym']
+      else:
+         msgSym = '*'
+      if 'alertSym' in kw:
+         alertSym = kw['alertSym']
+      else:
+         alertSym = '+'
+      if 'warnSym' in kw:
+         warnSym = kw['warnSym']
+      else:
+         warnSym = '>'
+      if 'errorSym' in kw:
+         errorSym = kw['errorSym']
+      else:
+         errorSym = '!'
+
+
+      self.logColor = {
+         'msg': msgColor,
+         'alert': alertColor,
+         'warn': warnColor,
+         'error': errorColor
+      }
+
+
+      self.logSymbol = {
+         'msg': msgSym,
+         'alert': alertSym,
+         'warn': warnSym,
+         'error': errorSym
+      }
+
 
 
    def msg(self, msg):
-      print('[*] {0}').format(msg)
-
-
-   def error(self, msg):
-      print('{0}[!]{1} {2}').format(
-         self.colors['red'][True], 
-         self.colors['red'][False], 
-         msg
-      )
+      print('[{0}] {1}').format(self.logSymbol['msg'], msg)
 
 
    def alert(self, msg):
-      print('{0}[+]{1} {2}').format(
-         self.colors['yellow'][True], 
-         self.colors['yellow'][False], 
-         msg
+      print('{0}[{3}]{1} {2}').format(
+         self.colors[self.logColor['alert']][1], 
+         self.colors[self.logColor['alert']][0], 
+         msg,
+         self.logSymbol['alert']
       )
 
 
    def warn(self, msg):
-      print('{0}[*] {1}{2}{3}{4}').format(
-         self.colors['purple'][True],
-         self.colors['underline'][True],
+      print('{0}[{5}] {1}{2}{3}{4}').format(
+         self.colors[self.logColor['warn']][1],
+         self.colors['underline'][1],
          msg,
-         self.colors['underline'][False],
-         self.colors['purple'][False]
+         self.colors['underline'][0],
+         self.colors[self.logColor['warn']][0],
+         self.logSymbol['warn']
+      )
+
+      
+   def error(self, msg):
+      print('{0}[{3}]{1} {2}').format(
+         self.colors[self.logColor['error']][1], 
+         self.colors[self.logColor['error']][0], 
+         msg,
+         self.logSymbol['error']
+      )
+
+
+   #######################
+   # Nested log messages #
+   #######################
+   def nestedMsg(self, msg):
+      print('[{1}]\t└── {0}').format(msg, self.logSymbol['msg'])
+
+
+   def nestedAlert(self, msg):
+      print('{0}[{3}]{1}\t└── {2}').format(
+         self.colors[self.logColor['alert']][1], 
+         self.colors[self.logColor['alert']][0], 
+         msg,
+         self.logSymbol['alert']
+      )
+
+
+   def nestedWarn(self, msg):
+      print('{0}[{5}]\t└── {1}{2}{3}{4}').format(
+         self.colors[self.logColor['warn']][1],
+         self.colors['underline'][1],
+         msg,
+         self.colors['underline'][0],
+         self.colors[self.logColor['warn']][0],
+         self.logSymbol['warn']
+      )
+
+
+   def nestedError(self, msg):
+      print('{0}[{3}]{1}\t└── {2}').format(
+         self.colors[self.logColor['error']][1],
+         self.colors[self.logColor['error']][0],
+         msg,
+         self.logSymbol['error']
       )
 
 
@@ -82,45 +171,116 @@ class LogHandler(object):
    ################################################
    def debug(self, msg):
       if self.dbg:
-         print('[-] {0}').format(msg)
+         print('[{1}] {0}').format(msg, self.logSymbol['msg'])
       else:
          return
 
+
+   def dbgAlert(self, msg):
+      if self.dbg:
+         print('{0}[{3}]{1} {2}').format(
+            self.colors[self.logColor['alert']][1], 
+            self.colors[self.logColor['alert']][0], 
+            msg,
+            self.logSymbol['alert']
+         )
+      else:
+         return
+
+
+   def dbgWarn(self, msg):
+      if self.dbg:
+         print('{0}[{5}] {1}{2}{3}{4}').format(
+            self.colors[self.logColor['warn']][1],
+            self.colors['underline'][1],
+            msg,
+            self.colors['underline'][0],
+            self.colors[self.logColor['warn']][0],
+            self.logSymbol['warn']
+         )
+      else:
+         return
+
+
    def dbgError(self, msg):
-      print('{0}[!]{1} {2}').format(
-         self.colors['red'][True], 
-         self.colors['red'][False], 
-         msg
+      print('{0}[{3}]{1} {2}').format(
+         self.colors[self.logColor['error']][1], 
+         self.colors[self.logColor['error']][0], 
+         msg,
+         self.logSymbol['error']
       )
 
 
-
-   def debNested(self, msg):
+   #########################
+   # Nested debug messages #
+   #########################
+   def dbgNested(self, msg):
       if self.dbg:
-         print('[-]\t└── {0}').format(msg)
+         print('[{1}]\t└── {0}').format(msg, self.logSymbol['msg'])
       else:
          return
 
 
-   def debNestedAlert(self, msg):
+   def dbgNestedAlert(self, msg):
       if self.dbg:
-         print('{0}[+]{1}\t└── {2}').format(s
-            elf.colors['yellow'][True], 
-            self.colors['yellow'][False], 
-            msg
+         print('{0}[{3}]{1}\t└── {2}').format(
+            self.colors[self.logColor['alert']][1], 
+            self.colors[self.logColor['alert']][0], 
+            msg,
+            self.logSymbol['alert']
          )
       else:
          return
 
 
-   def debAlert(self, msg):
+   def dbgNestedWarn(self, msg):
       if self.dbg:
-         print('{0}[+]{1} {2}').format(
-            self.colors['yellow'][True], 
-            self.colors['yellow'][False], 
-            msg
+         print('{0}[{5}]\t└── {1}{2}{3}{4}').format(
+            self.colors[self.logColor['warn']][1],
+            self.colors['underline'][1],
+            msg,
+            self.colors['underline'][0],
+            self.colors[self.logColor['warn']][0],
+            self.logSymbol['warn']
          )
       else:
          return
 
 
+   def dbgNestedError(self, msg):
+      if self.dbg:
+         print('{0}[{3}]{1}\t└── {2}').format(
+            self.colors[self.logColor['error']][1],
+            self.colors[self.logColor['error']][0],
+            msg,
+            self.logSymbol['error']
+         )
+      else:
+         return
+
+
+if __name__ == '__main__':
+   log = LogHandler(debug=True)
+
+   log.msg('This is a message')
+   log.alert('This is an alert message')
+   log.warn('This is a warn message')
+   log.error('This is an error message')
+
+   print('\n=================')
+   log.nestedMsg('This is a nested message')
+   log.nestedAlert('This is a nested alert message')
+   log.nestedWarn('This is a nested warn message')
+   log.nestedError('This is a nested error message')
+   
+   print('\n=================')
+   log.debug('This is a debug message')
+   log.dbgAlert('This is a debug alert message')
+   log.dbgWarn('This is a debug warn message')
+   log.dbgError('This is a debug error message')
+   
+   print('\n=================')
+   log.dbgNested('This is a nested debug message')
+   log.dbgNestedAlert('This is a nested debug alert message')
+   log.dbgNestedWarn('This is a nested debug warn message')
+   log.dbgNestedError('This is a nested debug error message')
